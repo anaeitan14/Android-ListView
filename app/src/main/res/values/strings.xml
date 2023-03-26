@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MyViewList</string>
+    <string name="menuTitle_Done">Done</string>
 </resources>

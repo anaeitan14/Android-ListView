@@ -11,12 +11,16 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class MainActivity extends AppCompatActivity {
 
 
     ListView listviewData;
     ArrayAdapter<String> adapter;
-    String[] arrayContent = {"Android", "Apple","React","Lenovo","Nvidia","Java","Selenium"};
+    ArrayList arrayContent = new ArrayList<String>(Arrays.asList("Android","React","Native","Java"));
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         listviewData = findViewById(R.id.listviewData);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, arrayContent);
+        adapter = new CustomAdapter(this, arrayContent);
         listviewData.setAdapter(adapter);
     }
 
