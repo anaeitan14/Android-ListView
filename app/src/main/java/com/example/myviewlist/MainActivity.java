@@ -39,13 +39,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-
         listviewData = findViewById(R.id.listviewData);
-        System.out.println(arrayContent);
         readItems();
-        System.out.println(arrayContent);
-
-
     }
 
     @Override
@@ -56,12 +51,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("items");
+
+
         if(item.getItemId() == R.id.item_done) {
             String itemSelected = "Selected Items: \n";
             for(int i=0;i<listviewData.getCount();i++) {
                 try {
-
-                    CheckBox cb = (CheckBox)listviewData.getChildAt(i).findViewById(R.id.checkBox);
+                    CheckBox cb = listviewData.getChildAt(i).findViewById(R.id.checkBox);
                     if(cb.isChecked()) {
                         itemSelected += listviewData.getItemAtPosition(i) +" ";
                     }
@@ -72,6 +70,27 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, itemSelected, Toast.LENGTH_SHORT).show();
         }
 
+
+        if(item.getItemId() == R.id.remove_item) {
+            for(int i=0;i<listviewData.getCount();i++) {
+                try {
+                    CheckBox cb = listviewData.getChildAt(i).findViewById(R.id.checkBox);
+                    if(cb.isChecked()) {
+                        System.out.println(listviewData.getItemAtPosition(i)+"");
+                        myRef.child(listviewData.getItemAtPosition(i)+"").removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(getBaseContext(), "Item/s removed", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
+                } catch (Exception e) {
+
+                }
+            }
+        }
         return true;
     }
 
@@ -83,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         String item = et_item.getText().toString().trim();
         int item_id = (int)(Math.random()*100);
 
-        myRef.child(item_id+"").setValue(item).addOnCompleteListener(
+        myRef.child(item+"").setValue(item).addOnCompleteListener(
                 new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -109,12 +128,10 @@ public class MainActivity extends AppCompatActivity {
                 listviewData.setAdapter(adapter);
             }
 
-
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                System.out.println("cancelled fetch");
+            public void onCancelled(@NonNull DatabaseError error)  {
+
             }
         });
-
     }
 }

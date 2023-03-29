@@ -8,4 +8,10 @@
         app:showAsAction="ifRoom"
         />
 
+    <item
+        android:id="@+id/remove_item"
+        android:icon="@drawable/baseline_remove_circle_24"
+        app:showAsAction="ifRoom"
+        android:title="remove"
+        />
 </menu>
