@@ -25,7 +25,7 @@ public class CustomAdapter extends ArrayAdapter<String> {
         LayoutInflater li = LayoutInflater.from(getContext());
         View customView = li.inflate(R.layout.custom_row, parent, false);
         String singleItem = getItem(position);
-        TextView tvItem = customView.findViewById(R.id.tvText);
+        TextView tvItem = customView.findViewById(R.id.productName);
         tvItem.setText(singleItem);
         return customView;
     }

@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     ListView listviewData;
     ArrayAdapter<String> adapter;
     ArrayList arrayContent = new ArrayList<String>();
-    FirebaseDatabase firebaseDatabase;
 
 
     @Override
@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        firebaseDatabase = FirebaseDatabase.getInstance();
         listviewData = findViewById(R.id.listviewData);
         readItems();
     }
@@ -76,12 +75,15 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     CheckBox cb = listviewData.getChildAt(i).findViewById(R.id.checkBox);
                     if(cb.isChecked()) {
-                        System.out.println(listviewData.getItemAtPosition(i)+"");
+//                        TextView tvProductName = (TextView) listviewData.getChildAt(i).findViewById(R.id.productName);
+//                        String productToDelete = tvProductName.getText().toString();
+//                        myRef.child(productToDelete).removeValue();
+
                         myRef.child(listviewData.getItemAtPosition(i)+"").removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(getBaseContext(), "Item/s removed", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getBaseContext(), "Item removed", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -100,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
         EditText et_item = findViewById(R.id.etItem);
         String item = et_item.getText().toString().trim();
-        int item_id = (int)(Math.random()*100);
+
 
         myRef.child(item+"").setValue(item).addOnCompleteListener(
                 new OnCompleteListener<Void>() {
@@ -117,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("items");
         myRef.addValueEventListener(new ValueEventListener() {
-
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 arrayContent.clear();

@@ -10,10 +10,10 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="50dp"
-        app:srcCompat="@drawable/baseline_shopping_basket_24" />
+        app:srcCompat="@drawable/ic_baseline_shopping_basket_24" />
 
     <TextView
-        android:id="@+id/tvText"
+        android:id="@+id/productName"
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:layout_marginLeft="5dp"
