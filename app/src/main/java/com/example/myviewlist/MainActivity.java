@@ -103,8 +103,10 @@ public class MainActivity extends AppCompatActivity {
         EditText et_item = findViewById(R.id.etItem);
         String item = et_item.getText().toString().trim();
 
+        Product newProduct = new Product(item,4.3,"Israeli snack",250);
 
-        myRef.child(item+"").setValue(item).addOnCompleteListener(
+
+        myRef.child(newProduct.getName()).setValue(newProduct).addOnCompleteListener(
                 new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -123,7 +125,10 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 arrayContent.clear();
                 for(DataSnapshot itemSnapShot : snapshot.getChildren()) {
-                    arrayContent.add((itemSnapShot.getValue().toString()));
+                    arrayContent.add(
+                            itemSnapShot.getValue(Product.class).getName()//+" "+
+                            //itemSnapShot.getValue(Product.class).getPrice()
+                    );
                 }
                 adapter = new CustomAdapter(getBaseContext(), arrayContent);
                 listviewData.setAdapter(adapter);

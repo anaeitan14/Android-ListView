@@ -5,12 +5,12 @@
     android:layout_height="match_parent">
 
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <ImageView
         android:id="@+id/cart"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="50dp"
-        app:srcCompat="@drawable/ic_baseline_shopping_basket_24" />
+        android:src="@drawable/ic_baseline_shopping_basket_24" />
 
     <TextView
         android:id="@+id/productName"
