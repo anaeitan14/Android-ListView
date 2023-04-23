@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-public class CustomAdapter extends ArrayAdapter<String> {
+public class CustomAdapter extends ArrayAdapter<Product> {
 
     public CustomAdapter(@NonNull Context context, ArrayList databaseAdapter) {
         super(context, R.layout.custom_row, databaseAdapter);
@@ -24,9 +24,19 @@ public class CustomAdapter extends ArrayAdapter<String> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater li = LayoutInflater.from(getContext());
         View customView = li.inflate(R.layout.custom_row, parent, false);
-        String singleItem = getItem(position);
+
+        String productName = getItem(position).getName();
+        String productPrice = String.valueOf(getItem(position).getPrice());
+        String productQty = String.valueOf(getItem(position).getQty());
+
         TextView tvItem = customView.findViewById(R.id.productName);
-        tvItem.setText(singleItem);
+        TextView tvPrice = customView.findViewById(R.id.tvPrice);
+        TextView tvQty = customView.findViewById(R.id.tvQty);
+
+        tvItem.setText(productName);
+        tvPrice.setText(productPrice);
+        tvQty.setText(productQty);
+
         return customView;
     }
 }

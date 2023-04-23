@@ -26,20 +26,23 @@ import com.google.firebase.database.ValueEventListener;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
     ListView listviewData;
-    ArrayAdapter<String> adapter;
-    ArrayList arrayContent = new ArrayList<String>();
+    ArrayAdapter<Product> adapter;
+    ArrayList arrayContent = new ArrayList<Product>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        adapter = new CustomAdapter(getBaseContext(), arrayContent);
 
         listviewData = findViewById(R.id.listviewData);
         readItems();
+        updateProduct();
     }
 
     @Override
@@ -54,13 +57,13 @@ public class MainActivity extends AppCompatActivity {
         DatabaseReference myRef = database.getReference("items");
 
 
-        if(item.getItemId() == R.id.item_done) {
+        if (item.getItemId() == R.id.item_done) {
             String itemSelected = "Selected Items: \n";
-            for(int i=0;i<listviewData.getCount();i++) {
+            for (int i = 0; i < listviewData.getCount(); i++) {
                 try {
                     CheckBox cb = listviewData.getChildAt(i).findViewById(R.id.checkBox);
-                    if(cb.isChecked()) {
-                        itemSelected += listviewData.getItemAtPosition(i) +" ";
+                    if (cb.isChecked()) {
+                        itemSelected += listviewData.getItemAtPosition(i) + " ";
                     }
                 } catch (Exception e) {
 
@@ -70,16 +73,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        if(item.getItemId() == R.id.remove_item) {
-            for(int i=0;i<listviewData.getCount();i++) {
+        if (item.getItemId() == R.id.remove_item) {
+            for (int i = 0; i < listviewData.getCount(); i++) {
                 try {
                     CheckBox cb = listviewData.getChildAt(i).findViewById(R.id.checkBox);
-                    if(cb.isChecked()) {
+                    if (cb.isChecked()) {
 //                        TextView tvProductName = (TextView) listviewData.getChildAt(i).findViewById(R.id.productName);
 //                        String productToDelete = tvProductName.getText().toString();
 //                        myRef.child(productToDelete).removeValue();
 
-                        myRef.child(listviewData.getItemAtPosition(i)+"").removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        myRef.child(listviewData.getItemAtPosition(i) + "").removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
@@ -103,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         EditText et_item = findViewById(R.id.etItem);
         String item = et_item.getText().toString().trim();
 
-        Product newProduct = new Product(item,4.3,"Israeli snack",250);
+        Product newProduct = new Product(item, 4.3, "Israeli snack", 250);
 
 
         myRef.child(newProduct.getName()).setValue(newProduct).addOnCompleteListener(
@@ -124,19 +127,36 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 arrayContent.clear();
-                for(DataSnapshot itemSnapShot : snapshot.getChildren()) {
-                    arrayContent.add(
-                            itemSnapShot.getValue(Product.class).getName()//+" "+
-                            //itemSnapShot.getValue(Product.class).getPrice()
+                for (DataSnapshot itemSnapShot : snapshot.getChildren()) {
+                    Product temp = new Product(
+                            itemSnapShot.getValue(Product.class).getName(),
+                            itemSnapShot.getValue(Product.class).getPrice(),
+                            itemSnapShot.getValue(Product.class).getInfo(),
+                            itemSnapShot.getValue(Product.class).getQty()
                     );
+                    arrayContent.add(temp);
                 }
-                adapter = new CustomAdapter(getBaseContext(), arrayContent);
+
                 listviewData.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error)  {
+            public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+    }
+
+    private void updateProduct() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("items");
+        HashMap update = new HashMap();
+        update.put("price", 53.4);
+        myRef.child("test").updateChildren(update).addOnCompleteListener(new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                Toast.makeText(MainActivity.this, "Item updated", Toast.LENGTH_SHORT).show();
             }
         });
     }
