@@ -2,55 +2,65 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="500dp"
-    android:orientation="vertical"
-    android:background="@color/cardview_dark_background">
-
-    <ImageView
-        android:id="@+id/cart"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="50dp"
-        android:src="@drawable/ic_baseline_shopping_basket_24" />
-
-    <TextView
-        android:id="@+id/productName"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_marginLeft="5dp"
-        android:text="TextView"
-        android:textSize="20dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="50dp"
-        android:gravity="center"
-        android:layout_height="50dp"
-        android:layout_marginTop="50dp" />
+    android:layout_height="200dp"
+    android:padding="20dp"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:orientation="vertical">
+        android:layout_height="80dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/cart"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_baseline_shopping_basket_24" />
 
         <TextView
-            android:id="@+id/tvQty"
-            android:layout_width="200dp"
+            android:id="@+id/productName"
+            android:layout_width="150dp"
             android:layout_height="50dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginLeft="20dp"
+            android:gravity="center_vertical"
             android:text="TextView"
             android:textSize="20dp" />
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:layout_marginLeft="20dp"
+            android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/tvPrice"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="TextView"
-            android:textSize="20dp" />
+            android:layout_marginLeft="20dp"
+            android:textSize="20sp" />
 
+        <TextView
+            android:id="@+id/tvQty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:layout_marginLeft="20dp"
+            android:textSize="20sp" />
     </LinearLayout>
 
 

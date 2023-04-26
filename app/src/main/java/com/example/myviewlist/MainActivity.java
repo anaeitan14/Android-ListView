@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
         listviewData = findViewById(R.id.listviewData);
         readItems();
-        updateProduct();
     }
 
     @Override
@@ -63,7 +62,8 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     CheckBox cb = listviewData.getChildAt(i).findViewById(R.id.checkBox);
                     if (cb.isChecked()) {
-                        itemSelected += listviewData.getItemAtPosition(i) + " ";
+                        Product prod = (Product) listviewData.getItemAtPosition(i);
+                        itemSelected += prod.getName() + " ";
                     }
                 } catch (Exception e) {
 
@@ -81,8 +81,9 @@ public class MainActivity extends AppCompatActivity {
 //                        TextView tvProductName = (TextView) listviewData.getChildAt(i).findViewById(R.id.productName);
 //                        String productToDelete = tvProductName.getText().toString();
 //                        myRef.child(productToDelete).removeValue();
+                        Product prod = (Product) listviewData.getItemAtPosition(i);
 
-                        myRef.child(listviewData.getItemAtPosition(i) + "").removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        myRef.child(prod.getName()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
@@ -105,8 +106,25 @@ public class MainActivity extends AppCompatActivity {
 
         EditText et_item = findViewById(R.id.etItem);
         String item = et_item.getText().toString().trim();
+        EditText et_info = findViewById(R.id.etInfo);
+        String info = et_info.getText().toString().trim();
 
-        Product newProduct = new Product(item, 4.3, "Israeli snack", 250);
+        if(item.equals("") || info.equals("")) {
+            Toast.makeText(this, "Missing fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        EditText et_Price = findViewById(R.id.etPrice);
+        EditText et_quantity = findViewById(R.id.etQuantity);
+        if(et_Price.getText().toString().trim().equals("") || et_quantity.getText().toString().trim().equals("")) {
+            Toast.makeText(this, "Missing fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        double price = Double.parseDouble(et_Price.getText().toString().trim());
+        int quantity = Integer.parseInt(et_quantity.getText().toString().trim());
+
+        Product newProduct = new Product(item, price, info, quantity);
 
 
         myRef.child(newProduct.getName()).setValue(newProduct).addOnCompleteListener(
@@ -115,6 +133,10 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             et_item.setText("");
+                            et_info.setText("");
+                            et_Price.setText("");
+                            et_quantity.setText("");
+
                         }
                     }
                 });
@@ -148,12 +170,30 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void updateProduct() {
+    public void updateProduct(View view) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("items");
+
+        EditText et_item = findViewById(R.id.etItem);
+        String item = et_item.getText().toString().trim();
+
+        if(item.equals("")) {
+            Toast.makeText(this, "Missing fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        EditText et_Price = findViewById(R.id.etPrice);
+        if(et_Price.getText().toString().trim().equals("")) {
+            Toast.makeText(this, "Missing fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        double price = Double.parseDouble(et_Price.getText().toString().trim());
+
         HashMap update = new HashMap();
-        update.put("price", 53.4);
-        myRef.child("test").updateChildren(update).addOnCompleteListener(new OnCompleteListener() {
+
+        update.put("price", price);
+        myRef.child(item).updateChildren(update).addOnCompleteListener(new OnCompleteListener() {
             @Override
             public void onComplete(@NonNull Task task) {
                 Toast.makeText(MainActivity.this, "Item updated", Toast.LENGTH_SHORT).show();

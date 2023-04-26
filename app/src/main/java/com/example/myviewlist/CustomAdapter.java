@@ -28,14 +28,17 @@ public class CustomAdapter extends ArrayAdapter<Product> {
         String productName = getItem(position).getName();
         String productPrice = String.valueOf(getItem(position).getPrice());
         String productQty = String.valueOf(getItem(position).getQty());
+        String productInfo = getItem(position).getInfo();
 
         TextView tvItem = customView.findViewById(R.id.productName);
+        TextView tvInfo = customView.findViewById(R.id.tvInfo);
         TextView tvPrice = customView.findViewById(R.id.tvPrice);
         TextView tvQty = customView.findViewById(R.id.tvQty);
 
         tvItem.setText(productName);
         tvPrice.setText(productPrice);
         tvQty.setText(productQty);
+        tvInfo.setText(productInfo);
 
         return customView;
     }
